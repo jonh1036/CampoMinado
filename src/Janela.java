@@ -14,6 +14,7 @@ public class Janela extends JFrame implements ActionListener{
 	private int minas[][] = new int[9][9];
 	private int adjacentes[][] = new int[9][9];
 	Font f = new Font("Arial",  Font.PLAIN, 8);
+	int countToWin = 72;
 	
 	public Janela() {
 		setSize(385,405);
@@ -86,14 +87,14 @@ public class Janela extends JFrame implements ActionListener{
 	}
 	
 	private void showAdjacentes(int i, int j) {//Fazer o "splash" no tabuleiro
-		if((j-1 >= 0) && minas[i][j-1] == 0) {campo[i][j-1].setEnabled(false);}
-		if((j+1 < 9) && minas[i][j+1] == 0) {campo[i][j+1].setEnabled(false);}
-		if((i+1 < 9) && minas[i+1][j] == 0) {campo[i+1][j].setEnabled(false);}
-		if((i-1 >= 0) && minas[i-1][j] == 0) {campo[i-1][j].setEnabled(false);}
-		if((i-1 >= 0 && j-1 >=0) && minas[i-1][j-1] == 0) {campo[i-1][j-1].setEnabled(false);}
-		if((i-1 >= 0 && j+1 < 9) && minas[i-1][j+1] == 0) {campo[i-1][j+1].setEnabled(false);}
-		if((i+1 < 9 && j+1 < 9) && minas[i+1][j+1] == 0) {campo[i+1][j+1].setEnabled(false);}
-		if((i+1 < 9 && j-1 >= 0) && minas[i+1][j-1] == 0) {campo[i+1][j-1].setEnabled(false);}
+		if((j-1 >= 0) && minas[i][j-1] == 0) {campo[i][j-1].setEnabled(false);countToWin -= 1;}
+		if((j+1 < 9) && minas[i][j+1] == 0) {campo[i][j+1].setEnabled(false);countToWin -= 1;}
+		if((i+1 < 9) && minas[i+1][j] == 0) {campo[i+1][j].setEnabled(false);countToWin -= 1;}
+		if((i-1 >= 0) && minas[i-1][j] == 0) {campo[i-1][j].setEnabled(false);countToWin -= 1;}
+		if((i-1 >= 0 && j-1 >=0) && minas[i-1][j-1] == 0) {campo[i-1][j-1].setEnabled(false);countToWin -= 1;}
+		if((i-1 >= 0 && j+1 < 9) && minas[i-1][j+1] == 0) {campo[i-1][j+1].setEnabled(false);countToWin -= 1;}
+		if((i+1 < 9 && j+1 < 9) && minas[i+1][j+1] == 0) {campo[i+1][j+1].setEnabled(false);countToWin -= 1;}
+		if((i+1 < 9 && j-1 >= 0) && minas[i+1][j-1] == 0) {campo[i+1][j-1].setEnabled(false);countToWin -= 1;}
 		
 		if((i>0 && i<8) &&(j>0 && j<8)) {
 			if(minas[i][j-1] == 0)
@@ -121,20 +122,25 @@ public class Janela extends JFrame implements ActionListener{
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
 				if ( arg0.getSource() == campo[i][j] ) {
-					if(minas[i][j] == 0) {//Sem minas e área adjacente
+					if(minas[i][j] == 0) {//Sem minas 
 						showAdjacentes(i,j);
 					}
-					else if(minas[i][j] == -1) {//Sem minas
+					else if(minas[i][j] == -1) {//Sem minas e área adjacente
 						campo[i][j].setText("" + adjacentes[i][j]);
+						countToWin -= 1;
 					}
 					else if(minas[i][j] == 1){//Com minas
 						campo[i][j].setIcon(icone);
-						JOptionPane.showMessageDialog(null, "FIM DE JOGO", "Game over", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Você perdeu!", "Game over", JOptionPane.WARNING_MESSAGE);
 						System.exit(0);
 					}
 					campo[i][j].setEnabled(false);
 				}
 			}
-		}	            
+		}
+		if(countToWin ==0) {
+			JOptionPane.showMessageDialog(null, "Você ganhou!", "Vitória", JOptionPane.OK_OPTION);
+			System.exit(0);
+		}
 	}
 }
